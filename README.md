@@ -1,6 +1,6 @@
-# SentinelVPN – Infrastructure
+# Prok – Infrastructure
 
-Infrastructure repository for SentinelVPN (WireGuard-based VPN).
+Infrastructure repository for Prok (WireGuard-based VPN).
 
 ## Features
 - WireGuard VPN server
