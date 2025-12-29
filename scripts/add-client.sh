@@ -1,10 +1,3 @@
-#!/bin/bash
-
-# ============================
-# WireGuard Client Generator
-# Level: MID
-# ============================
-
 set -e
 
 CLIENT_NAME="$1"
@@ -26,7 +19,6 @@ if [ -d "$CLIENT_DIR" ]; then
   exit 1
 fi
 
-# Obtener IP disponible
 LAST_IP=$(cat "$STATE_FILE")
 CLIENT_IP="10.8.0.$LAST_IP"
 
@@ -36,13 +28,11 @@ echo "$NEXT_IP" > "$STATE_FILE"
 mkdir -p "$CLIENT_DIR"
 chmod 700 "$CLIENT_DIR"
 
-# Generar claves
 wg genkey | tee "$CLIENT_DIR/private.key" | wg pubkey > "$CLIENT_DIR/public.key"
 
 CLIENT_PRIVATE_KEY=$(cat "$CLIENT_DIR/private.key")
 CLIENT_PUBLIC_KEY=$(cat "$CLIENT_DIR/public.key")
 
-# Registrar peer en WireGuard
 cat >> "$WG_CONF" <<EOF
 
 [Peer]
@@ -50,11 +40,9 @@ PublicKey = $CLIENT_PUBLIC_KEY
 AllowedIPs = $CLIENT_IP/32
 EOF
 
-# Reiniciar WireGuard
 wg-quick down wg0
 wg-quick up wg0
 
-# Crear config del cliente
 cat > "$CLIENT_DIR/$CLIENT_NAME.conf" <<EOF
 [Interface]
 PrivateKey = $CLIENT_PRIVATE_KEY
