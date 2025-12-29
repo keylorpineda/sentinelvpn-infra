@@ -1,10 +1,3 @@
-#!/bin/bash
-
-# ============================
-# WireGuard Client Remover
-# Level: MID
-# ============================
-
 set -e
 
 CLIENT_NAME="$1"
@@ -25,10 +18,8 @@ fi
 
 CLIENT_PUBLIC_KEY=$(cat "$CLIENT_DIR/public.key")
 
-# Backup config
 cp "$WG_CONF" "$WG_CONF.bak.$(date +%s)"
 
-# Remove peer block from wg0.conf
 awk -v key="$CLIENT_PUBLIC_KEY" '
 BEGIN { skip=0 }
 /^\[Peer\]/ { block=$0; skip=0 }
@@ -42,11 +33,9 @@ BEGIN { skip=0 }
 
 mv /tmp/wg0.conf.tmp "$WG_CONF"
 
-# Reload WireGuard
 wg-quick down wg0
 wg-quick up wg0
 
-# Remove client files
 rm -rf "$CLIENT_DIR"
 
 echo "Client '$CLIENT_NAME' removed successfully"
