@@ -1,0 +1,12 @@
+# secrets
+*.key
+*.pem
+
+# real wireguard configs
+wg0.conf
+*.conf
+
+# runtime
+clients/
+state/
+*.log
